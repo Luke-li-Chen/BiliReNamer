@@ -8,10 +8,11 @@ url = 'http://www.bilibili.com/video/av965983'
 
 html = GetHTML(url)
 #print(html)
-title = GetTitle(html)
+title, options = GetTitle(html)
 
 if title == None:
     print('---')
 else:
     print(title)
+    print(options)
 
