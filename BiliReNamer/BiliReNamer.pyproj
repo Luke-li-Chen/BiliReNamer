@@ -26,6 +26,9 @@
     <Compile Include="GetHTML.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GetURL.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TitleHTMLParser.py">
       <SubType>Code</SubType>
     </Compile>
