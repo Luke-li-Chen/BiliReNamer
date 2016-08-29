@@ -1,18 +1,17 @@
 from GetHTML import GetHTML
 from TitleHTMLParser import GetTitle
 
-#url = 'http://www.bilibili.com/video/av5687666'
-url = 'http://www.bilibili.com/video/av965983'
-#url = 'http://www.bilibili.com/video/av5974216'     # 已被删除
+#url = 'http://www.bilibili.com/video/av5687666'     # 1Part
+#url = 'http://www.bilibili.com/video/av965983'      # 3Part
+url = 'http://www.bilibili.com/video/av5974216'     # 已被删除
 
 
 html = GetHTML(url)
-#print(html)
-title, options = GetTitle(html)
+info = GetTitle(html)
 
-if title == None:
+if info.nParts == 0:
     print('---')
 else:
-    print(title)
-    print(options)
-
+    print(info.title)
+    for i in range(info.nParts):
+        print(info.options[i])
