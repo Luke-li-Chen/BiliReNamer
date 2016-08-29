@@ -8,16 +8,15 @@ def GetHTML(url) :
     rawdata = f.read()
     headers = f.info()
 
+    # 若网页压缩，则使用gzip解压
     if ('Content-Encoding' in headers and headers['Content-Encoding']) or \
         ('content-encoding' in headers and headers['content-encoding']):
-        print('压缩')
         data = BytesIO(rawdata)
         gz = gzip.GzipFile(fileobj = data)
         rawdata = gz.read()
         gz.close()
-    else:
-        print('未压缩')
 
+    # 字节流转字符串
     html = rawdata.decode('utf-8')
 
     return html
