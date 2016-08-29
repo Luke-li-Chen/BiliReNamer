@@ -3,7 +3,7 @@ from html.entities import name2codepoint
 
 class TitleHTMLParser(HTMLParser):
     def __init__(self):
-        HTMLParser.__init__(self)   # ¼Ì³Ð¸¸ÀàµÄ¹¹Ôìº¯Êý
+        HTMLParser.__init__(self)   # ç»§æ‰¿çˆ¶ç±»çš„æž„é€ å‡½æ•°
         self.links = []
         self.options = []
         self.processing = None
