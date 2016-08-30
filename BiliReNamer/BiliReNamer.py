@@ -75,7 +75,20 @@ for avNum in AVNums:
         nP = int(x)
 
         if info.nParts == 1:    # 对单P视频
-            pass
+            # 产生新文件全路径
+            fileNameNew = info.title + '_' + info.author + '_av' + avNum + '.mp4'
+            filePathNew = os.path.join(GetURL.rootPath, fileNameNew)
+
+            # 同时重命名并移动文件
+            os.rename(filePathOld, filePathNew)
+
+
+            # 回到根目录
+            os.chdir('..')
+            os.chdir('..')
+
+            # 删除视频目录及其中剩余文件
+            shutil.rmtree(VideoPath, True)
         else:                   # 对多P视频
             # 产生新文件全路径
             fileNameNew = info.options[nP - 1]
@@ -85,17 +98,9 @@ for avNum in AVNums:
             # 同时重命名并移动文件
             os.rename(filePathOld, filePathNew)
 
-        # 回到视频目录
-        os.chdir('..')
+            # 回到视频目录
+            os.chdir('..')
 
-        # 删除分P目录及其中剩余文件
-        shutil.rmtree(PartPath, True)
-            #print(x)
-    #print(newPath)
-
-    print('\n')
-
-
-#GetURL.GetURLs()
-
+            # 删除分P目录及其中剩余文件
+            shutil.rmtree(PartPath, True)
     
