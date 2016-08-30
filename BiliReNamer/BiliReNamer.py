@@ -36,26 +36,39 @@ GetURL.ChToRootPath()
 AVNums = GetURL.GetAVNList()
 
 for avNum in AVNums:
-    #info = GetInfo(avNum)
+    info = GetInfo(avNum)
     
-    #if info.nParts == 0:
-    #    print('---')
-    #else:
-    #    print(info.title)
-    #    for i in range(info.nParts):
-    #        print(info.options[i])
+    if info.nParts == 0:
+        print('---')
+    else:
+        print(info.title)
+        for i in range(info.nParts):
+            print(info.options[i])
 
     newPath = os.path.join(GetURL.rootPath, avNum)
     os.chdir(newPath)
-    print(os.path.abspath('.'))
+    DirPath = os.path.abspath('.')
 
     for x in os.listdir('.') :
         if (os.path.isdir(x) and GetURL.IsInteger(x)):
             os.chdir(x)
-            print(os.path.abspath('.'))
+            #DirPath = os.path.abspath('.')
+            #print(os.path.abspath('.'))
 
-            list = [x for x in os.listdir('.') if os.path.splitext(x)[1] == '.mp4'][0]
-            print(os.path.abspath(list))
+            fileNameOld = [x for x in os.listdir('.') if os.path.splitext(x)[1] == '.mp4'][0]
+            filePathOld = os.path.abspath(fileNameOld)
+            
+            nP = int(x)
+
+            if info.nParts == 1:
+                pass
+            else:
+                fileNameNew = info.options[nP - 1]
+                fileNameNew += '.mp4'
+                filePathNew = os.path.join(DirPath, fileNameNew)
+                #print(filePathNew)
+                os.rename(filePathOld, filePathNew)
+            
 
 
             os.chdir('..')
