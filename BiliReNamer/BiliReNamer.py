@@ -21,6 +21,7 @@ from TitleHTMLParser import GetTitle
 
 import os
 import GetURL
+import shutil 
 
 def GetInfo(avNum):
     url = GetURL.urlRoot + avNum
@@ -39,21 +40,25 @@ for avNum in AVNums:
     info = GetInfo(avNum)
     
     if info.nParts == 0:
-        print('---')
-    else:
-        print(info.title)
-        for i in range(info.nParts):
-            print(info.options[i])
+        continue
+    #else:
+    #    print(info.title)
+    #    for i in range(info.nParts):
+    #        print(info.options[i])
 
-    newPath = os.path.join(GetURL.rootPath, avNum)
-    os.chdir(newPath)
-    DirPath = os.path.abspath('.')
+    VideoPath = os.path.join(GetURL.rootPath, avNum)
+    #print(VideoPath)
+    os.chdir(VideoPath)
+    VideoPath = os.path.abspath('.')
+    #print(VideoPath)
 
     for x in os.listdir('.') :
         if (os.path.isdir(x) and GetURL.IsInteger(x)):
             os.chdir(x)
-            #DirPath = os.path.abspath('.')
-            #print(os.path.abspath('.'))
+
+            # 分P目录
+            PartPath = os.path.abspath('.')
+            #print(PartPath)
 
             fileNameOld = [x for x in os.listdir('.') if os.path.splitext(x)[1] == '.mp4'][0]
             filePathOld = os.path.abspath(fileNameOld)
@@ -65,13 +70,12 @@ for avNum in AVNums:
             else:
                 fileNameNew = info.options[nP - 1]
                 fileNameNew += '.mp4'
-                filePathNew = os.path.join(DirPath, fileNameNew)
+                filePathNew = os.path.join(VideoPath, fileNameNew)
                 #print(filePathNew)
                 os.rename(filePathOld, filePathNew)
-            
-
 
             os.chdir('..')
+            shutil.rmtree(PartPath, True)
             #print(x)
     #print(newPath)
 
