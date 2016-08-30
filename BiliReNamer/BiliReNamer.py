@@ -21,6 +21,7 @@ from TitleHTMLParser import GetTitle
 
 import os
 import GetURL
+import shutil 
 
 def GetInfo(avNum):
     url = GetURL.urlRoot + avNum
@@ -36,29 +37,59 @@ GetURL.ChToRootPath()
 AVNums = GetURL.GetAVNList()
 
 for avNum in AVNums:
-    #info = GetInfo(avNum)
-    
-    #if info.nParts == 0:
-    #    print('---')
-    #else:
-    #    print(info.title)
-    #    for i in range(info.nParts):
-    #        print(info.options[i])
+    info = GetInfo(avNum)
 
-    newPath = os.path.join(GetURL.rootPath, avNum)
-    os.chdir(newPath)
-    print(os.path.abspath('.'))
+    # 网页不存在的跳过
+    if info.nParts == 0:
+        continue
+
+    # 视频目录
+    VideoPath = os.path.join(GetURL.rootPath, avNum)
+
+    # 对多P视频，更改目录名
+    if info.nParts > 1:
+        VideoDirNameNew = info.title + '_' + info.author + '_av' + avNum
+        VideoDirPathNew = os.path.join(GetURL.rootPath, VideoDirNameNew)
+        os.rename(VideoPath, VideoDirPathNew)
+        VideoPath = VideoDirPathNew
+
+    # 进入视频目录
+    os.chdir(VideoPath)
+    VideoPath = os.path.abspath('.')
 
     for x in os.listdir('.') :
-        if (os.path.isdir(x) and GetURL.IsInteger(x)):
-            os.chdir(x)
-            print(os.path.abspath('.'))
+        # 跳过文件和非纯数字目录，只处理纯数字目录，即分P目录
+        if (not (os.path.isdir(x) and GetURL.IsInteger(x))):
+            continue
+        # 进入分P目录
+        os.chdir(x)
 
-            list = [x for x in os.listdir('.') if os.path.splitext(x)[1] == '.mp4'][0]
-            print(os.path.abspath(list))
+        # 获取分P目录路径
+        PartPath = os.path.abspath('.')
 
+        # 遍历，找到视频文件名和全路径
+        fileNameOld = [x for x in os.listdir('.') if os.path.splitext(x)[1] == '.mp4'][0]
+        filePathOld = os.path.abspath(fileNameOld)
 
-            os.chdir('..')
+        # 整数分P号
+        nP = int(x)
+
+        if info.nParts == 1:    # 对单P视频
+            pass
+        else:                   # 对多P视频
+            # 产生新文件全路径
+            fileNameNew = info.options[nP - 1]
+            fileNameNew += '.mp4'
+            filePathNew = os.path.join(VideoPath, fileNameNew)
+
+            # 同时重命名并移动文件
+            os.rename(filePathOld, filePathNew)
+
+        # 回到视频目录
+        os.chdir('..')
+
+        # 删除分P目录及其中剩余文件
+        shutil.rmtree(PartPath, True)
             #print(x)
     #print(newPath)
 
