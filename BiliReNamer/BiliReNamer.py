@@ -38,44 +38,58 @@ AVNums = GetURL.GetAVNList()
 
 for avNum in AVNums:
     info = GetInfo(avNum)
-    
+
+    # 网页不存在的跳过
     if info.nParts == 0:
         continue
-    #else:
-    #    print(info.title)
-    #    for i in range(info.nParts):
-    #        print(info.options[i])
 
+    # 视频目录
     VideoPath = os.path.join(GetURL.rootPath, avNum)
-    #print(VideoPath)
+
+    # 对多P视频，更改目录名
+    if info.nParts > 1:
+        VideoDirNameNew = info.title + '_' + info.author + '_av' + avNum
+        VideoDirPathNew = os.path.join(GetURL.rootPath, VideoDirNameNew)
+        os.rename(VideoPath, VideoDirPathNew)
+        VideoPath = VideoDirPathNew
+
+    # 进入视频目录
     os.chdir(VideoPath)
     VideoPath = os.path.abspath('.')
-    #print(VideoPath)
 
     for x in os.listdir('.') :
-        if (os.path.isdir(x) and GetURL.IsInteger(x)):
-            os.chdir(x)
+        # 跳过文件和非纯数字目录，只处理纯数字目录，即分P目录
+        if (not (os.path.isdir(x) and GetURL.IsInteger(x))):
+            continue
+        # 进入分P目录
+        os.chdir(x)
 
-            # 分P目录
-            PartPath = os.path.abspath('.')
-            #print(PartPath)
+        # 获取分P目录路径
+        PartPath = os.path.abspath('.')
 
-            fileNameOld = [x for x in os.listdir('.') if os.path.splitext(x)[1] == '.mp4'][0]
-            filePathOld = os.path.abspath(fileNameOld)
-            
-            nP = int(x)
+        # 遍历，找到视频文件名和全路径
+        fileNameOld = [x for x in os.listdir('.') if os.path.splitext(x)[1] == '.mp4'][0]
+        filePathOld = os.path.abspath(fileNameOld)
 
-            if info.nParts == 1:
-                pass
-            else:
-                fileNameNew = info.options[nP - 1]
-                fileNameNew += '.mp4'
-                filePathNew = os.path.join(VideoPath, fileNameNew)
-                #print(filePathNew)
-                os.rename(filePathOld, filePathNew)
+        # 整数分P号
+        nP = int(x)
 
-            os.chdir('..')
-            shutil.rmtree(PartPath, True)
+        if info.nParts == 1:    # 对单P视频
+            pass
+        else:                   # 对多P视频
+            # 产生新文件全路径
+            fileNameNew = info.options[nP - 1]
+            fileNameNew += '.mp4'
+            filePathNew = os.path.join(VideoPath, fileNameNew)
+
+            # 同时重命名并移动文件
+            os.rename(filePathOld, filePathNew)
+
+        # 回到视频目录
+        os.chdir('..')
+
+        # 删除分P目录及其中剩余文件
+        shutil.rmtree(PartPath, True)
             #print(x)
     #print(newPath)
 
