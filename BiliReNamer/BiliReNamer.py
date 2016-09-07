@@ -6,24 +6,43 @@ import configparser
 from GetHTML import GetHTML
 from TitleHTMLParser import GetTitle
 
+# 替换不能作为文件名的字符
+def CharFilter(str):
+    str = str.replace('\\', '_')
+    str = str.replace('/', '_')
+    str = str.replace(':', '：')
+    str = str.replace('*', '_')
+    str = str.replace('?', '？')
+    str = str.replace('"', '“')
+    str = str.replace('<', '《')
+    str = str.replace('>', '》')
+    str = str.replace('|', '_')
+    return str
 
+def InfoCharFilter(titleInfo):
+    titleInfo.title = CharFilter(titleInfo.title)
+    titleInfo.author = CharFilter(titleInfo.author)
+    for i in range(len(titleInfo.options)):
+        titleInfo.options[i] = CharFilter(titleInfo.options[i])
 
 def GetInfo(avNum):
     url = GetURL.urlRoot + avNum
     html = GetHTML(url)
     info = GetTitle(html)
+    InfoCharFilter(info)
     return info
 
+# 读配置文件
 config = configparser.ConfigParser()
 config.readfp(open('config.ini'))
 
+# 获取工作目录
 GetURL.rootPath = config.get('WorkPath', 'Path')
 
-
+# 更改工作目录
 GetURL.ChToRootPath()
 
-#print(os.path.abspath('.'))
-
+# 获取工作目录中所有AV号列表
 AVNums = GetURL.GetAVNList()
 
 for avNum in AVNums:
