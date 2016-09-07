@@ -1,33 +1,23 @@
+import os
+import GetURL
+import shutil
+import configparser
+
 from GetHTML import GetHTML
 from TitleHTMLParser import GetTitle
 
-##url = 'http://www.bilibili.com/video/av5687666'     # 1Part
-#url = 'http://www.bilibili.com/video/av965983'      # 3Part
-##url = 'http://www.bilibili.com/video/av5974216'     # 已被删除
-##url = 'http://www.bilibili.com/video/av1234567'      # 特殊符号 &quot;
 
-
-#html = GetHTML(url)
-#info = GetTitle(html)
-
-#if info.nParts == 0:
-#    print('---')
-#else:
-#    print(info.title)
-#    print(info.author)
-#    for i in range(info.nParts):
-#        print(info.options[i])
-
-
-import os
-import GetURL
-import shutil 
 
 def GetInfo(avNum):
     url = GetURL.urlRoot + avNum
     html = GetHTML(url)
     info = GetTitle(html)
     return info
+
+config = configparser.ConfigParser()
+config.readfp(open('config.ini'))
+
+GetURL.rootPath = config.get('WorkPath', 'Path')
 
 
 GetURL.ChToRootPath()
