@@ -20,6 +20,8 @@ def CharFilter(str):
     return str
 
 def InfoCharFilter(titleInfo):
+    if titleInfo.nParts == 0:
+        return
     titleInfo.title = CharFilter(titleInfo.title)
     titleInfo.author = CharFilter(titleInfo.author)
     for i in range(len(titleInfo.options)):
@@ -28,6 +30,7 @@ def InfoCharFilter(titleInfo):
 def GetInfo(avNum):
     url = GetURL.urlRoot + avNum
     html = GetHTML(url)
+    #print(html)
     info = GetTitle(html)
     InfoCharFilter(info)
     return info

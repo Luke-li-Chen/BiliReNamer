@@ -68,7 +68,7 @@ def GetTitle(html):
         info = TitleInfo(nParts, parser.titles[0], parser.author, parser.options)
         return info;
     else:       # 无正确内容时（视频不存在）
-        info = TitleInfo(0, None, None)
+        info = TitleInfo(0, None, None, [])
         return info;
 
 
