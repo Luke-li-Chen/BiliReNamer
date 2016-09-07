@@ -1,7 +1,7 @@
 import os
 
 urlRoot = 'http://www.bilibili.com/video/av'
-rootPath = r'E:\Chen_Li\Videos\Test'
+rootPath = ''
 
 
 global g_avNums
