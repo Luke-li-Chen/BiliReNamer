@@ -48,11 +48,20 @@ GetURL.ChToRootPath()
 # 获取工作目录中所有AV号列表
 AVNums = GetURL.GetAVNList()
 
+# 待处理总数
+total = len(AVNums)
+
+# 已处理数量
+n = 0
+
 for avNum in AVNums:
     info = GetInfo(avNum)
 
     # 网页不存在的跳过
     if info.nParts == 0:
+        n += 1
+        print(n, '/', total)
+        print('\t视频', avNum, '未找到')
         continue
 
     # 视频目录
@@ -115,4 +124,5 @@ for avNum in AVNums:
 
             # 删除分P目录及其中剩余文件
             shutil.rmtree(PartPath, True)
-    
+    n += 1
+    print(n, '/', total)
