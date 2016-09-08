@@ -1,6 +1,11 @@
 # VS
 .vs/
 
+# Other
+*.ini
+*.tmp
+*.bak
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
