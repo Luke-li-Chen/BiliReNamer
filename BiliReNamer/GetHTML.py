@@ -2,8 +2,14 @@ from urllib import request
 from io import BytesIO
 import gzip
 
-def GetHTML(url) :
-    f = request.urlopen(url)
+
+def GetHTML(url):
+    try:
+        f = request.urlopen(url)
+    except BaseException as e:
+        print('出现异常，url为 %s' % url)
+        print(e)
+        return null
 
     rawdata = f.read()
     headers = f.info()

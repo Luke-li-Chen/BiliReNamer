@@ -89,7 +89,12 @@ for avNum in AVNums:
         PartPath = os.path.abspath('.')
 
         # 遍历，找到视频文件名和全路径
-        fileNameOld = [x for x in os.listdir('.') if os.path.splitext(x)[1] == '.mp4'][0]
+        try:
+            fileNameOld = [x for x in os.listdir('.') if os.path.splitext(x)[1] == '.mp4'][0]
+        except BaseException as e:
+            print('出现异常，视频编号为 %s' % avNum)
+            print(e)
+            continue
         filePathOld = os.path.abspath(fileNameOld)
 
         # 整数分P号
